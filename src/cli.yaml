@@ -1,0 +1,15 @@
+name: SpotifyUtils
+version: "1.0"
+author: Sam B. <barrett370@gmail.com>
+about: Various wrappers for the rspotify library
+
+subcommands:
+        - get-currently-playing:
+                about: Gets currently playing track
+        - next-song:
+                about: Skips the currenly playing track
+        - prev-song:
+                about: Skips to the previously playing song 
+        - play-pause:
+                about: Toggles play pause
+

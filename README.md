@@ -1,6 +1,12 @@
 # spt-utils
 
-This is a simple program to wrap functionality implemented by [rspotify](https://github.com/ramsayleung/rspotify). Currently allows for the checking of the currently playing song, song skipping forward and backward and play/pause.
+This is a simple program to wrap functionality implemented by [rspotify](https://github.com/ramsayleung/rspotify).
+
+Currently allows for:
+
+- Checking the currently playing song
+- Song skipping forward/backward
+- Play/pause toggle.
 
 To build:
 

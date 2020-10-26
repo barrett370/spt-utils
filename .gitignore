@@ -3,5 +3,6 @@ debug/
 Cargo.lock
 **/*.rs.bk
 .env
+.envrc
 .spotify_token_cache.json
 

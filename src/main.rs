@@ -7,7 +7,7 @@ use rspotify::util::get_token;
 
 static CLIENT_ID: &'static str = env!("CLIENT_ID");
 static CLIENT_SECRET: &'static str = env!("CLIENT_SECRET");
-static REDIRECT_URI: &'static str = env!("REDIRECT_URI");
+static REDIRECT_URI: &'static str = "http://localhost:8888/callback";
 
 #[tokio::main]
 async fn main() {

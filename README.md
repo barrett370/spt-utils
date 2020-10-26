@@ -10,6 +10,6 @@ Currently allows for:
 
 To build:
 
-with `CLIENT_ID`, `CLIENT_SECRET` and `REDIRECT_URI` set in your path (set redirect URI to `http://localhost:8888/callback` run `cargo build --release`.
+with `CLIENT_ID` and `CLIENT_SECRET` set in your path (redirect URI set to `http://localhost:8888/callback` by default) run `cargo build --release`.
 
 Generate your client_id and secret [here](https://developer.spotify.com/dashboard/applications)

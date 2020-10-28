@@ -13,17 +13,18 @@ static REDIRECT_URI: &'static str = "http://localhost:8888/callback";
 
 #[tokio::main]
 async fn main() {
-    let config_path: &str = &format!("{}/.config/spt-utils/client.yml", std::env::var("HOME").unwrap());
+    let config_path: &str = &format!(
+        "{}/.config/spt-utils/client.yml",
+        std::env::var("HOME").unwrap()
+    );
 
-    let auth_yaml = YamlLoader::load_from_str(&std::fs::read_to_string(config_path).unwrap()).unwrap();
+    let auth_yaml =
+        YamlLoader::load_from_str(&std::fs::read_to_string(config_path).unwrap()).unwrap();
 
     let auth = &auth_yaml[0];
-    
+
     let client_id = auth["client_id"].as_str().unwrap();
     let client_secret = auth["client_secret"].as_str().unwrap();
-
-
-
 
     let yaml = load_yaml!("cli.yaml");
     let matches = App::from(yaml).get_matches();

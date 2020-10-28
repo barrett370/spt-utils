@@ -10,6 +10,9 @@ edition = "2018"
 rspotify = "0.10.0"
 tokio = { version = "0.2", features = ["full"] }
 clap = { version = "2.33.3", features =[ "yaml" ]}
+yaml-rust = "0.4"
+
+
 
 [profile.release]
 lto = true

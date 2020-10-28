@@ -10,8 +10,14 @@ Currently allows for:
 
 To build:
 
-with `CLIENT_ID` and `CLIENT_SECRET` set in your path (redirect URI set to `http://localhost:8888/callback` by default) run `cargo build --release`.
+Run `cargo build --release`.
 
-Generate your client_id and secret [here](https://developer.spotify.com/dashboard/applications)
+Generate your client_id and secret [here](https://developer.spotify.com/dashboard/applications) and store them in a file `~/.config/spt-utils/client.yml` of the form:
+
+```yaml
+---
+client_id: xxxxx
+client_secret: xxxxx
+```
 
 **Note: If compilation is taking too long/ is too resource intensive, remove the line `lto=true` from `Cargo.toml`. This disables dependency optimisation on compilation**

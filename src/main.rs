@@ -9,7 +9,7 @@ use yaml_rust::YamlLoader;
 
 //static client_id: &'static str = env!("client_id");
 //static client_secret: &'static str = env!("client_secret");
-static REDIRECT_URI: &'static str = "http://localhost:8888/callback";
+static REDIRECT_URI: &'static str = "http://localhost:8889/callback";
 
 #[tokio::main]
 async fn main() {
@@ -33,7 +33,7 @@ async fn main() {
         .client_id(client_id)
         .client_secret(client_secret)
         .redirect_uri(REDIRECT_URI)
-        .scope("user-read-currently-playing user-read-playback-state")
+        .scope("user-read-currently-playing user-read-playback-state app-remote-control")
         .build();
     match get_token(&mut oauth).await {
         Some(token_info) => {

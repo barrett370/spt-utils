@@ -9,22 +9,26 @@ use yaml_rust::YamlLoader;
 
 //static client_id: &'static str = env!("client_id");
 //static client_secret: &'static str = env!("client_secret");
-static REDIRECT_URI: &'static str = "http://localhost:8889/callback";
+static REDIRECT_URI: &str = "http://localhost:8889/callback";
 
 #[tokio::main]
 async fn main() {
     let config_path: &str = &format!(
         "{}/.config/spt-utils/client.yml",
-        std::env::var("HOME").unwrap()
+        std::env::var("HOME").expect("value of $HOME")
     );
 
-    let auth_yaml =
-        YamlLoader::load_from_str(&std::fs::read_to_string(config_path).unwrap()).unwrap();
+    let auth_yaml = YamlLoader::load_from_str(
+        &std::fs::read_to_string(config_path).expect("contents as string of file at config_path"),
+    )
+    .expect("Yaml containing client.yml");
 
     let auth = &auth_yaml[0];
 
-    let client_id = auth["client_id"].as_str().unwrap();
-    let client_secret = auth["client_secret"].as_str().unwrap();
+    let client_id = auth["client_id"].as_str().expect("client_id string");
+    let client_secret = auth["client_secret"]
+        .as_str()
+        .expect("client_secret string");
 
     let yaml = load_yaml!("cli.yaml");
     let matches = App::from(yaml).get_matches();
@@ -35,6 +39,7 @@ async fn main() {
         .redirect_uri(REDIRECT_URI)
         .scope("user-read-currently-playing user-read-playback-state app-remote-control")
         .build();
+
     match get_token(&mut oauth).await {
         Some(token_info) => {
             let client_credential = SpotifyClientCredentials::default()
@@ -43,25 +48,27 @@ async fn main() {
             let spotify = Spotify::default()
                 .client_credentials_manager(client_credential)
                 .build();
-            if let Some(_) = matches.subcommand_matches("get-currently-playing") {
+            if matches
+                .subcommand_matches("get-currently-playing")
+                .is_some()
+            {
                 let res = get_currently_playing(spotify).await;
-                match res {
-                    Some(s) => println!("{:?}", s),
-                    None => return,
-                }
-            } else if let Some(_) = matches.subcommand_matches("next-song") {
+                if let Some(s) = res {
+                    println!("{:?}", s)
+                };
+            } else if matches.subcommand_matches("next-song").is_some() {
                 match next_song(spotify).await {
-                    Ok(_) => return,
+                    Ok(_) => {}
                     Err(e) => eprintln!("{}", e),
                 }
-            } else if let Some(_) = matches.subcommand_matches("prev-song") {
+            } else if matches.subcommand_matches("prev-song").is_some() {
                 match prev_song(spotify).await {
-                    Ok(_) => return,
+                    Ok(_) => {}
                     Err(e) => eprintln!("{}", e),
                 }
-            } else if let Some(_) = matches.subcommand_matches("play-pause") {
+            } else if matches.subcommand_matches("play-pause").is_some() {
                 match play_pause(spotify).await {
-                    Ok(_) => return,
+                    Ok(_) => {}
                     Err(e) => eprintln!("{}", e),
                 }
             }
@@ -72,7 +79,15 @@ async fn main() {
 
 async fn play_pause(spotify: Spotify) -> Result<(), String> {
     let devices = spotify.device().await;
-    let device = Some((&devices.unwrap().devices.get(0).unwrap().id).clone());
+    let device = Some(
+        (&devices
+            .expect("Devices structure")
+            .devices
+            .get(0)
+            .expect("First device structure in vec")
+            .id)
+            .clone(),
+    );
 
     let playing = spotify.current_user_playing_track().await;
     match playing {
@@ -98,7 +113,15 @@ async fn play_pause(spotify: Spotify) -> Result<(), String> {
 
 async fn next_song(spotify: Spotify) -> Result<(), String> {
     let devices = spotify.device().await;
-    let device = Some((&devices.unwrap().devices.get(0).unwrap().id).clone());
+    let device = Some(
+        (&devices
+            .expect("Devices structure")
+            .devices
+            .get(0)
+            .expect("First device structure in vec")
+            .id)
+            .clone(),
+    );
     match spotify.next_track(device).await {
         Ok(_) => Ok(()),
         Err(_) => Err(String::from("Error changing to next song")),
@@ -107,7 +130,15 @@ async fn next_song(spotify: Spotify) -> Result<(), String> {
 
 async fn prev_song(spotify: Spotify) -> Result<(), String> {
     let devices = spotify.device().await;
-    let device = Some((&devices.unwrap().devices.get(0).unwrap().id).clone());
+    let device = Some(
+        (&devices
+            .expect("Devices structure")
+            .devices
+            .get(0)
+            .expect("First device structure in vec")
+            .id)
+            .clone(),
+    );
     match spotify.previous_track(device).await {
         Ok(_) => Ok(()),
         Err(_) => Err(String::from("Error changing to previous song")),
@@ -125,7 +156,7 @@ async fn get_currently_playing(spotify: Spotify) -> Option<String> {
                 Some(track) => Some(format!(
                     "{} - {}",
                     track.name,
-                    track.artists.get(0).unwrap().name
+                    track.artists.get(0).expect("first track artist").name
                 )),
             },
         },

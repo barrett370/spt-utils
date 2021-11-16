@@ -21,3 +21,4 @@ client_secret: xxxxx
 ```
 
 **Note: If compilation is taking too long/ is too resource intensive, remove the line `lto=true` from `Cargo.toml`. This disables dependency optimisation on compilation**
+

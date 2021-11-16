@@ -11,5 +11,5 @@ subcommands:
         - prev-song:
                 about: Skips to the previously playing song 
         - play-pause:
-                about: Toggles play pause
+                about: Toggles play+pause
 
